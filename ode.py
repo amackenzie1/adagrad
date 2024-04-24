@@ -6,7 +6,7 @@ from with_numba import gauss_hermite
 
 
 class AdaGradODE:
-    def __init__(self, kind, G=1.5, b_0=0.5, dt=1/256, e_var=0, seed=None):
+    def __init__(self, kind, G=1, b_0=0.5, dt=1/256, e_var=0, seed=None):
         self.G = G
         self.b_0 = b_0
         self.dt = dt
@@ -143,5 +143,5 @@ if __name__ == "__main__":
     plt.ylabel("Stepsize")
     plt.legend()
     plt.suptitle(r"Noise/no noise, identity eigenvalues")
-    plt.savefig("plots/ode_losses.png", dpi=1000)
+    plt.savefig("plots/ode.png", dpi=1000)
     plt.show()
