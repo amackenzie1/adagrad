@@ -6,12 +6,11 @@ from with_numba import gauss_hermite
 
 
 class AdaGradODE:
-    def __init__(self, kind, G=1, b_0=0.5, dt=1/256, e_var=0, seed=None):
+    def __init__(self, kind, G=1, b_0=1, dt=1/256, e_var=0, seed=None):
         self.G = G
         self.b_0 = b_0
         self.dt = dt
         self.e_var = e_var
-
         if (kind not in ["least squares", "logistic regression"]):
             raise ValueError(
                 "Type must be either 'least squares' or 'logistic regression'")
@@ -108,40 +107,28 @@ class AdaGradODE:
 
 if __name__ == "__main__":
 
-    def dist(x): return x**(-0.99)
+    # def dist(x): return x**(-0.99)
 
-    ode = AdaGradODE("least squares", G=1)
+    G = 1
+    T = 10**5
+    b_0 = 2
+    ode = AdaGradODE("least squares", G=G, b_0=b_0, dt=1e-2)
 
     plt.rcParams['agg.path.chunksize'] = 101
 
-    plt.figure(figsize=(12, 6))
+    d = 100
+    e_var = 0
+    X_ = np.random.normal(size=d)
+    X_ = X_ / np.sqrt((X_ @ X_))
+    eigs = np.ones(d)
+    ode.e_var = e_var
+    losses, steps = ode.get_losses(eigs, X_, T=T)
 
-    d = 2000
+    ode.plot(losses, label="Volterra", scaling="loglog")
 
-    for e_var in [0, 1]:
-        X_ = np.random.normal(size=d)
-        X_ = X_ / np.sqrt((X_ @ X_))
-        eigs = np.ones(d)
-        ode.e_var = e_var
-        losses, steps = ode.get_losses(eigs, X_, T=1e3)
-
-        plt.subplot(1, 2, 1)
-        ode.plot(losses, label=r"$e = $" +
-                 str(e_var), scaling="loglog")
-
-        plt.subplot(1, 2, 2)
-        ode.plot(steps, label=r"$e = $" +
-                 str(e_var), scaling="loglog")
-
-    plt.subplot(1, 2, 1)
-    plt.title("Losses")
+    plt.title("g'(t) vs Volterra")
     plt.xlabel("Time")
     plt.ylabel("Loss")
-    plt.subplot(1, 2, 2)
-    plt.title("Stepsizes")
-    plt.xlabel("Time")
-    plt.ylabel("Stepsize")
     plt.legend()
-    plt.suptitle(r"Noise/no noise, identity eigenvalues")
     plt.savefig("plots/ode.png", dpi=1000)
     plt.show()

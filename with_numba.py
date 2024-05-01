@@ -35,9 +35,9 @@ def gauss_hermite_numba(L, xi, w, n, which="R"):
         for j in range(n):
             x0 = np.sqrt(2) * (L[0, 0] * xi[i] + L[0, 1] * xi[j])
             x1 = np.sqrt(2) * (L[1, 0] * xi[i] + L[1, 1] * xi[j])
-            if which == "R_lg":
+            if which == "R_lr":
                 total += w[i] * w[j] * R_lg(x0, x1)
-            if which == "I_lg":
+            if which == "I_lr":
                 total += w[i] * w[j] * I_lg(x0, x1)
             if which == "R_ls":
                 total += w[i] * w[j] * R_ls(x0, x1)

@@ -25,14 +25,15 @@ if __name__ == "__main__":
 
     plt.figure(figsize=(12, 6))
     plt.subplot(1, 2, 1)
-    plt.plot(np.linspace(0, T, len(losses)), losses, label="AdaGrad")
-    plt.plot(np.linspace(0, T, len(ode_losses)),
-             ode_losses, label="AdaGrad ODE")
+    plt.loglog(np.linspace(0, T, len(losses)), losses, label="AdaGrad")
+    plt.loglog(np.linspace(0, T, len(ode_losses)),
+               ode_losses, label="AdaGrad ODE")
     plt.title("Losses")
 
     plt.subplot(1, 2, 2)
-    plt.plot(np.linspace(0, T, len(steps)), steps, label="AdaGrad")
-    plt.plot(np.linspace(0, T, len(ode_steps)), ode_steps, label="AdaGrad ODE")
+    plt.loglog(np.linspace(0, T, len(steps)), steps, label="AdaGrad")
+    plt.loglog(np.linspace(0, T, len(ode_steps)),
+               ode_steps, label="AdaGrad ODE")
     plt.title("Stepsizes")
 
     plt.suptitle(r"Comparison of AdaGrad and AdaGrad ODE, eigs ~ $x^{-1/4}$")
